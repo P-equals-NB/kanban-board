@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Kanban Board</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Kanban Board</h1>
+    <div class="actions">
+      <button id="addTaskBtn">+ Add Task</button>
+      <button id="supabaseBtn" class="secondary">Supabase</button>
+    </div>
+  </header>
+
+  <main class="board">
+    <section class="column" data-status="todo">
+      <div class="column-title"><h2>To Do</h2><span class="count">0</span></div>
+      <div class="task-list" id="todo"></div>
+    </section>
+    <section class="column" data-status="progress">
+      <div class="column-title"><h2>In Progress</h2><span class="count">0</span></div>
+      <div class="task-list" id="progress"></div>
+    </section>
+    <section class="column" data-status="done">
+      <div class="column-title"><h2>Done</h2><span class="count">0</span></div>
+      <div class="task-list" id="done"></div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="taskModal">
+    <div class="modal-box">
+      <h2 id="modalTitle">Add Task</h2>
+      <input id="taskTitle" type="text" placeholder="Task title">
+      <textarea id="taskDescription" placeholder="Description (optional)"></textarea>
+      <select id="taskStatus">
+        <option value="todo">To Do</option>
+        <option value="progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      <div class="modal-actions">
+        <button id="saveTaskBtn">Save</button>
+        <button id="cancelBtn" class="secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="supabaseModal">
+    <div class="modal-box">
+      <h2>Supabase Connection</h2>
+      <p>Optional: enter your Supabase project URL and anon key. The board still works locally without Supabase.</p>
+      <input id="supabaseUrl" type="text" placeholder="https://your-project.supabase.co">
+      <input id="supabaseKey" type="password" placeholder="Supabase anon key">
+      <div class="modal-actions">
+        <button id="connectBtn">Connect</button>
+        <button id="closeSupabaseBtn" class="secondary">Close</button>
+      </div>
+      <small id="connectionStatus"></small>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js"></script>
+</body>
+</html>

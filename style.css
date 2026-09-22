@@ -1,0 +1,164 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f5f7;
+  color: #222;
+}
+
+header {
+  background: #fff;
+  padding: 18px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 { margin: 0; font-size: 24px; }
+
+.actions { display: flex; gap: 8px; }
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 15px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover { opacity: .9; }
+
+button.secondary {
+  background: #e5e7eb;
+  color: #222;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  padding: 25px;
+  min-height: calc(100vh - 75px);
+}
+
+.column {
+  background: #e8eaed;
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 400px;
+}
+
+.column.drag-over { outline: 2px dashed #2563eb; }
+
+.column-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.column-title h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.count {
+  background: #d1d5db;
+  border-radius: 20px;
+  padding: 3px 9px;
+  font-size: 12px;
+}
+
+.task-list { min-height: 350px; }
+
+.task {
+  background: #fff;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 7px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  cursor: grab;
+}
+
+.task:active { cursor: grabbing; }
+
+.task h3 {
+  margin: 0 0 7px;
+  font-size: 15px;
+}
+
+.task p {
+  margin: 0 0 10px;
+  color: #666;
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+.task-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.task-actions button {
+  padding: 6px 9px;
+  font-size: 12px;
+}
+
+.delete { background: #dc2626; }
+.edit { background: #6b7280; }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.hidden { display: none; }
+
+.modal-box {
+  background: white;
+  width: min(450px, 100%);
+  border-radius: 9px;
+  padding: 22px;
+}
+
+.modal-box h2 { margin-top: 0; }
+
+.modal-box input,
+.modal-box textarea,
+.modal-box select {
+  width: 100%;
+  padding: 10px;
+  margin: 7px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font: inherit;
+}
+
+.modal-box textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#connectionStatus {
+  display: block;
+  margin-top: 12px;
+}
+
+@media (max-width: 800px) {
+  .board { grid-template-columns: 1fr; }
+  header { flex-direction: column; gap: 12px; align-items: flex-start; }
+}
