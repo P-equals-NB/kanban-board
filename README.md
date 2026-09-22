@@ -25,4 +25,3 @@ An internet connection is needed for the Supabase JavaScript CDN. The basic boar
 5. Open the board and click `Supabase`.
 6. Enter the URL and key and click Connect.
 
-The current demo policy is intentionally simple and allows public CRUD access. For a production project, use Supabase Auth and user-specific Row Level Security policies.
