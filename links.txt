@@ -1,0 +1,2 @@
+supabase db url = https://fkejmlelhlxxkcmnuqqg.supabase.co
+supabase db key = sb_publishable_VgVnRSd1nmpJYxA19jueKw_x1z8AOvJ
