@@ -8,10 +8,6 @@ create table tasks (
 
 alter table tasks enable row level security;
 
--- Simple college/demo setup.
--- This allows access without authentication.
--- For a real application, replace this with authenticated-user policies.
-
 create policy "Allow public read"
 on tasks for select
 using (true);
