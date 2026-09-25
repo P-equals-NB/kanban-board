@@ -1,5 +1,4 @@
--- Kanban Task Management database
--- Run this in the Supabase SQL Editor.
+
 
 create table if not exists public.tasks (
   id uuid primary key,
@@ -19,7 +18,7 @@ create index if not exists tasks_due_date_idx on public.tasks(user_id, due_date)
 
 alter table public.tasks enable row level security;
 
--- Remove the old public policies from the original project if they exist.
+
 drop policy if exists "Allow public read" on public.tasks;
 drop policy if exists "Allow public insert" on public.tasks;
 drop policy if exists "Allow public update" on public.tasks;
