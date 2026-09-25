@@ -1,26 +1,50 @@
-create table tasks (
+-- Kanban Task Management database
+-- Run this in the Supabase SQL Editor.
+
+create table if not exists public.tasks (
   id uuid primary key,
+  user_id uuid not null references auth.users(id) on delete cascade,
   title text not null,
   description text,
-  status text not null default 'todo',
-  created_at timestamptz default now()
+  status text not null default 'todo' check (status in ('todo','progress','done')),
+  color text not null default 'blue',
+  priority text not null default 'medium' check (priority in ('low','medium','high')),
+  category text,
+  due_date date,
+  created_at timestamptz not null default now()
 );
 
-alter table tasks enable row level security;
+create index if not exists tasks_user_id_idx on public.tasks(user_id);
+create index if not exists tasks_due_date_idx on public.tasks(user_id, due_date);
 
-create policy "Allow public read"
-on tasks for select
-using (true);
+alter table public.tasks enable row level security;
 
-create policy "Allow public insert"
-on tasks for insert
-with check (true);
+-- Remove the old public policies from the original project if they exist.
+drop policy if exists "Allow public read" on public.tasks;
+drop policy if exists "Allow public insert" on public.tasks;
+drop policy if exists "Allow public update" on public.tasks;
+drop policy if exists "Allow public delete" on public.tasks;
 
-create policy "Allow public update"
-on tasks for update
-using (true)
-with check (true);
+create policy "Users can read their own tasks"
+on public.tasks for select
+to authenticated
+using (auth.uid() = user_id);
 
-create policy "Allow public delete"
-on tasks for delete
-using (true);
+create policy "Users can create their own tasks"
+on public.tasks for insert
+to authenticated
+with check (auth.uid() = user_id);
+
+create policy "Users can update their own tasks"
+on public.tasks for update
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+create policy "Users can delete their own tasks"
+on public.tasks for delete
+to authenticated
+using (auth.uid() = user_id);
+
+-- Optional: automatically remove a user's tasks when the account is deleted.
+-- The foreign key above handles this through on delete cascade.

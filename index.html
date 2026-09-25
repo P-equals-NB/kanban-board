@@ -3,64 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Kanban Board</title>
+  <meta name="description" content="A simple personal task management Kanban board.">
+  <title>Kanban — Task Management</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Kanban Board</h1>
-    <div class="actions">
-      <button id="addTaskBtn">+ Add Task</button>
-      <button id="supabaseBtn" class="secondary">Supabase</button>
-    </div>
-  </header>
-
-  <main class="board">
-    <section class="column" data-status="todo">
-      <div class="column-title"><h2>To Do</h2><span class="count">0</span></div>
-      <div class="task-list" id="todo"></div>
-    </section>
-    <section class="column" data-status="progress">
-      <div class="column-title"><h2>In Progress</h2><span class="count">0</span></div>
-      <div class="task-list" id="progress"></div>
-    </section>
-    <section class="column" data-status="done">
-      <div class="column-title"><h2>Done</h2><span class="count">0</span></div>
-      <div class="task-list" id="done"></div>
-    </section>
-  </main>
-
-  <div class="modal hidden" id="taskModal">
-    <div class="modal-box">
-      <h2 id="modalTitle">Add Task</h2>
-      <input id="taskTitle" type="text" placeholder="Task title">
-      <textarea id="taskDescription" placeholder="Description (optional)"></textarea>
-      <select id="taskStatus">
-        <option value="todo">To Do</option>
-        <option value="progress">In Progress</option>
-        <option value="done">Done</option>
-      </select>
-      <div class="modal-actions">
-        <button id="saveTaskBtn">Save</button>
-        <button id="cancelBtn" class="secondary">Cancel</button>
+  <div id="app">
+    <!-- Landing / Auth -->
+    <section id="authScreen" class="auth-screen">
+      <div class="auth-hero">
+        <div class="brand-mark">K</div>
+        <p class="eyebrow">KANBAN</p>
+        <h1>Organize your work.<br>Get things done.</h1>
+        <p class="hero-copy">A focused task manager with a Kanban workflow, priorities, due dates and a personal dashboard.</p>
+        <div class="feature-row"><span>✓ Simple</span><span>✓ Fast</span><span>✓ Organized</span></div>
       </div>
-    </div>
+      <div class="auth-panel">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-mode="login">Login</button>
+          <button class="auth-tab" data-auth-mode="signup">Sign up</button>
+        </div>
+        <div id="authLocalNotice" class="notice hidden"></div>
+        <form id="authForm">
+          <label>Email<input id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com"></label>
+          <label>Password<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="At least 6 characters"></label>
+          <label id="nameField" class="hidden">Name<input id="authName" type="text" autocomplete="name" placeholder="Your name"></label>
+          <button id="authSubmit" class="primary full" type="submit">Login</button>
+        </form>
+        <button id="demoBtn" class="secondary full">Continue in local demo mode</button>
+        <p id="authMessage" class="form-message"></p>
+        <p class="auth-footnote">Supabase mode stores your tasks per account. Local demo mode keeps data in this browser only.</p>
+      </div>
+    </section>
+
+    <!-- Main application -->
+    <section id="appScreen" class="app-screen hidden">
+      <header class="topbar">
+        <div class="brand"><div class="brand-mark small">K</div><div><strong>Kanban</strong><span>Task Management</span></div></div>
+        <nav class="topnav">
+          <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+          <button class="nav-btn" data-view="board">Board</button>
+        </nav>
+        <div class="top-actions">
+          <button id="themeBtn" class="icon-btn" title="Toggle dark mode">☾</button>
+          <div class="profile-wrap">
+            <button id="profileBtn" class="profile-btn"><span id="profileInitial">U</span><span id="profileName">User</span><span>⌄</span></button>
+            <div id="profileMenu" class="profile-menu hidden">
+              <div class="profile-menu-head"><strong id="menuProfileName">User</strong><span id="menuProfileEmail">Local mode</span></div>
+              <button id="settingsBtn">Settings</button>
+              <button id="logoutBtn" class="danger-text">Logout</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section id="dashboardView" class="view">
+          <div class="page-heading"><div><p class="eyebrow">OVERVIEW</p><h1 id="greeting">Good afternoon!</h1><p>Here is what is happening with your tasks.</p></div><button id="dashboardAddBtn" class="primary">+ Add Task</button></div>
+          <div class="stats-grid">
+            <article class="stat-card"><span>Total</span><strong id="statTotal">0</strong><small>all tasks</small></article>
+            <article class="stat-card"><span>In Progress</span><strong id="statProgress">0</strong><small>currently active</small></article>
+            <article class="stat-card"><span>Complete</span><strong id="statDone">0</strong><small>finished tasks</small></article>
+            <article class="stat-card"><span>Overdue</span><strong id="statOverdue">0</strong><small>need attention</small></article>
+          </div>
+          <div class="dashboard-grid">
+            <section class="panel"><div class="panel-title"><h2>Upcoming</h2><button class="text-btn" data-view="board">View board</button></div><div id="upcomingList" class="upcoming-list"></div></section>
+            <section class="panel"><div class="panel-title"><h2>By category</h2></div><div id="categoryList" class="category-list"></div></section>
+          </div>
+        </section>
+
+        <section id="boardView" class="view hidden">
+          <div class="page-heading"><div><p class="eyebrow">WORKSPACE</p><h1>Your Board</h1><p>Drag tasks between columns to update their status.</p></div><button id="boardAddBtn" class="primary">+ Add Task</button></div>
+          <div class="toolbar">
+            <div class="search-box"><span>⌕</span><input id="searchInput" placeholder="Search tasks..."></div>
+            <select id="priorityFilter"><option value="all">All priorities</option><option value="high">High priority</option><option value="medium">Medium priority</option><option value="low">Low priority</option></select>
+            <select id="categoryFilter"><option value="all">All categories</option></select>
+            <select id="dueFilter"><option value="all">Any due date</option><option value="overdue">Overdue</option><option value="soon">Due soon</option><option value="none">No due date</option></select>
+            <button id="clearFilters" class="secondary">Clear</button>
+          </div>
+          <div class="board" id="board">
+            <section class="column" data-status="todo"><div class="column-title"><h2>To Do</h2><span class="count" id="todoCount">0</span></div><div class="task-list" id="todo"></div></section>
+            <section class="column" data-status="progress"><div class="column-title"><h2>In Progress</h2><span class="count" id="progressCount">0</span></div><div class="task-list" id="progress"></div></section>
+            <section class="column" data-status="done"><div class="column-title"><h2>Done</h2><span class="count" id="doneCount">0</span></div><div class="task-list" id="done"></div></section>
+          </div>
+        </section>
+      </main>
+    </section>
   </div>
 
-  <div class="modal hidden" id="supabaseModal">
-    <div class="modal-box">
-      <h2>Supabase Connection</h2>
-      <p>Optional: enter your Supabase project URL and anon key. The board still works locally without Supabase.</p>
-      <input id="supabaseUrl" type="text" placeholder="https://your-project.supabase.co">
-      <input id="supabaseKey" type="password" placeholder="Supabase anon key">
-      <div class="modal-actions">
-        <button id="connectBtn">Connect</button>
-        <button id="closeSupabaseBtn" class="secondary">Close</button>
-      </div>
-      <small id="connectionStatus"></small>
+  <!-- Task modal -->
+  <div class="modal hidden" id="taskModal"><div class="modal-box large">
+    <div class="modal-head"><div><p class="eyebrow">TASK</p><h2 id="modalTitle">Add Task</h2></div><button class="close-btn" data-close="taskModal">×</button></div>
+    <div class="form-grid">
+      <label class="span-2">Title<input id="taskTitle" type="text" placeholder="Task title" maxlength="120"></label>
+      <label class="span-2">Description<textarea id="taskDescription" placeholder="What needs to be done?"></textarea></label>
+      <label>Status<select id="taskStatus"><option value="todo">To Do</option><option value="progress">In Progress</option><option value="done">Done</option></select></label>
+      <label>Priority<select id="taskPriority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label>
+      <label>Due date<input id="taskDueDate" type="date"></label>
+      <label>Category<input id="taskCategory" type="text" placeholder="e.g. College" maxlength="40"></label>
+      <label>Colour<select id="taskColor"><option value="blue">Blue</option><option value="purple">Purple</option><option value="green">Green</option><option value="orange">Orange</option><option value="red">Red</option></select></label>
     </div>
-  </div>
+    <div class="modal-actions"><button id="saveTaskBtn" class="primary">Save Task</button><button class="secondary" data-close="taskModal">Cancel</button></div>
+  </div></div>
 
+  <!-- Settings -->
+  <div class="modal hidden" id="settingsModal"><div class="modal-box">
+    <div class="modal-head"><div><p class="eyebrow">ACCOUNT</p><h2>Settings</h2></div><button class="close-btn" data-close="settingsModal">×</button></div>
+    <label>Display name<input id="settingsName" type="text" maxlength="60"></label>
+    <div class="setting-row"><div><strong>Theme</strong><span>Use the theme button in the header to switch between light and dark mode.</span></div><button id="settingsThemeBtn" class="secondary">Toggle theme</button></div>
+    <div class="setting-row"><div><strong>Storage</strong><span id="storageInfo">Local browser storage</span></div></div>
+    <div class="modal-actions"><button id="saveSettingsBtn" class="primary">Save settings</button></div>
+  </div></div>
+
+  <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
