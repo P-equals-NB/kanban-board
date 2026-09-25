@@ -44,6 +44,3 @@ create policy "Users can delete their own tasks"
 on public.tasks for delete
 to authenticated
 using (auth.uid() = user_id);
-
--- Optional: automatically remove a user's tasks when the account is deleted.
--- The foreign key above handles this through on delete cascade.
