@@ -1,41 +1,58 @@
-# Kanban — Task Management
+# Kanban Board — local-first redesign
 
-An upgraded version of the original simple HTML/CSS/JavaScript Kanban board.
+A simple static Kanban board with no login page.
 
 ## Features
 
-- Landing page and Login / Sign up
-- Supabase Auth with persistent sessions
-- User-specific tasks protected by Supabase Row Level Security
-- Local demo mode when Supabase is not configured
-- Dashboard with total, in-progress, complete and overdue counts
-- Upcoming-task list and category breakdown
-- To Do / In Progress / Done Kanban board
-- Drag and drop status changes
-- Task title and description
-- Priority: Low / Medium / High
-- Due dates and overdue / due-soon indicators
-- Colour selection
-- Category / tag
-- Search and filters
-- Dark mode
-- Profile menu and display-name settings
-- Responsive mobile layout
+- Dashboard
+- To Do / In Progress / Done columns
+- Add, edit and delete tasks
+- Drag-and-drop status changes
+- Task descriptions
+- Priority: low / medium / high
+- Due dates
+- Overdue and due-soon detection
+- Categories
+- Task colours
+- Search
+- Priority/category/due-date filters
+- Task counters
+- Upcoming tasks
+- Category summary
+- Light/dark theme
+- LocalStorage mode
+- Optional Supabase mode
+- No npm, React, build system or login screen
 
-## Supabase setup
+## Files
+
+- `index.html` — UI
+- `style.css` — styling
+- `script.js` — application logic
+- `supabase.sql` — database/functions for passwordless Supabase boards
+
+## Local mode
+
+Open `index.html`.
+
+Tasks are stored in the browser's LocalStorage.
+
+## Supabase mode
 
 1. Create a Supabase project.
-2. In SQL Editor, run `supabase.sql`.
-3. Copy `config.example.js` to `config.js`.
-4. Put your Supabase project URL and publishable/anon key into `config.js`.
-5. Open `index.html` through a local/static web server.
+2. Open SQL Editor.
+3. Run `supabase.sql`.
+4. Open the app.
+5. Go to Settings -> Supabase.
+6. Enter the project URL and publishable/anon key.
+7. Click "Create new board".
+8. The app generates a Board ID and Board access key.
+9. Keep those two values if you want to reconnect to the same board elsewhere.
 
-Supabase Auth keeps the session in the browser. The database RLS policies restrict every task query to the authenticated user's `user_id`.
+No Supabase Auth is used.
 
-## Local demo mode
+The Board ID + Board access key act as the board's shared credential. Anyone with both can read and modify that board.
 
-If `config.js` is missing or has empty values, the app still works. Click **Continue in local demo mode**. Tasks are stored in this browser's localStorage and are not uploaded anywhere.
+## Existing project
 
-## Important
-
-The Supabase publishable/anon key is designed to be used by browser clients. Do not put a Supabase service-role key into `config.js`.
+This is deliberately a rewrite rather than an incremental patch. You can replace the existing `index.html`, `style.css`, `script.js`, and `supabase.sql` with these files.
