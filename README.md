@@ -1,6 +1,6 @@
-# Kanban Board — local-first redesign
+# Kanban Board 
 
-A simple static Kanban board with no login page.
+A simple static Kanban board 
 
 ## Features
 
@@ -22,7 +22,6 @@ A simple static Kanban board with no login page.
 - Light/dark theme
 - LocalStorage mode
 - Optional Supabase mode
-- No npm, React, build system or login screen
 
 ## Files
 
@@ -52,7 +51,3 @@ Tasks are stored in the browser's LocalStorage.
 No Supabase Auth is used.
 
 The Board ID + Board access key act as the board's shared credential. Anyone with both can read and modify that board.
-
-## Existing project
-
-This is deliberately a rewrite rather than an incremental patch. You can replace the existing `index.html`, `style.css`, `script.js`, and `supabase.sql` with these files.
